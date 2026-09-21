@@ -1,8 +1,8 @@
 $region  = "us-east-1"
 $profile = "nphase"
+$ns      = "kube-system"
 $env:KUBECONFIG="C:\Users\aubre\.kube\nphase.yaml"
 #$env:KUBECONFIG ="C:\Users\aubre\.kube\pfizer.yaml"
-
 
 $clusters = aws eks list-clusters --region $region --profile $profile --query "clusters[]" --output text
 
@@ -22,16 +22,19 @@ foreach ($c in $clusters -split "\s+") {
         continue
     }
 
-    # Standard cluster: read Karpenter version via kubectl (context must exist)
-    $img = kubectl --context $c get deployment -A -l app.kubernetes.io/name=karpenter `
-        -o jsonpath="{.items[0].spec.template.spec.containers[0].image}" 2>$null
+    # Read Karpenter version from kube-system using current context
+   # $img =  kubectl --context "arn:aws:eks:us-east-1:381491891968:cluster/$c" -n kube-system  get deployment karpenter   -o jsonpath="{.spec.template.spec.containers[0].image}"
+    $img =  kubectl --context "arn:aws:eks:us-east-1:746159825267:cluster/$c" -n kube-system  get deployment karpenter   -o jsonpath="{.spec.template.spec.containers[0].image}"
+
+
 
     if ([string]::IsNullOrWhiteSpace($img)) {
-        "{0,-45} {1,-12} {2,-14} {3}" -f $c,$mode,"not found","no karpenter / no ctx"
+        "{0,-45} {1,-12} {2,-14} {3}" -f $c,$mode,"not found","no karpenter / check access"
         continue
     }
 
-    $ver = ($img -split ":")[-1] -replace '^v',''
+    $ver = ($img -split ":")[1] -replace '^v','' 
+    $ver = ($ver -split "@")[0]
     $verdict = "REVIEW"
     try {
         $v = [version]$ver
