@@ -1,11 +1,12 @@
 
-
+#  code to gather data for FedRAMP control IA05 
+#  
 
 export AWS_REGION=us-east-1
 export AWS_PROFILE=nphase
 
 
-echo '"ListenerArn,LoadBalancerArn,Port,Protocol,SslPolicy' > lb_tls_audit.csv
+echo '"ListenerArn,LoadBalancerArn,Port,Protocol,SslPolicy' > ia_05_LBaaS_TLS_Audit.csv
 
 aws elbv2 describe-load-balancers  --query 'LoadBalancers[?Scheme==`internet-facing`].LoadBalancerArn'  --output text | tr '\t' '\n' | while read arn; do
     # with only https
@@ -14,7 +15,7 @@ aws elbv2 describe-load-balancers  --query 'LoadBalancers[?Scheme==`internet-fac
     # all:
     aws --profile nphase elbv2 describe-listeners --load-balancer-arn $arn   | jq -rs '.[]|.Listeners[]|."ListenerArn"+","+."LoadBalancerArn"+","+(."Port"|tostring)+","+"Protocol"+","+(."SslPolicy" // "none")'
 
-done >> lb_tls_audit.csv
+done >> ia_05_LBaaS_TLS_Audit.csv
 
 
 #aws --profile nphase elbv2 describe-load-balancers   --query 'LoadBalancers[?Scheme==`internet-facing`].LoadBalancerArn'   --output text | tr '\t' '\n' | while read arn; do
