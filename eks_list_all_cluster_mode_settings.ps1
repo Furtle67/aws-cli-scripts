@@ -1,5 +1,5 @@
 $region  = "us-east-1"
-$profile = "nphase"
+$profile = "pfizer"
 
 $clusters = aws eks list-clusters --region $region --profile $profile --query "clusters[]" --output text
 

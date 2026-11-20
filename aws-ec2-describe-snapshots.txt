@@ -1,0 +1,4 @@
+aws ec2 describe-snapshots --owner-ids self --profile nphase --region us-east-1   --filters "Name=description,Values=*i-01670d2a36809ff3f*"   --query "Snapshots[].[SnapshotId,Description,StartTime]"   --output table
+
+#use the ami above: 
+aws ec2 describe-images --image-ids  ami-0b59000d9abd60a55 --profile nphase --region us-east-1   --query 'Images[].[ImageId,Name,State,CreationDate,Description]' --output table

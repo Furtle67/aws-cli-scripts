@@ -1,0 +1,8 @@
+ aws --profile nphase --region us-east-1 ec2 describe-instances --output text --query   'Reservations[*].Instances[*].[InstanceId, Tags[?Key==`Name`].Value | [0]]' >>instances.tsv
+ aws --profile nphase --region us-east-2 ec2 describe-instances --output text --query   'Reservations[*].Instances[*].[InstanceId, Tags[?Key==`Name`].Value | [0]]' >>instances.tsv
+ aws --profile nphase --region us-west-1 ec2 describe-instances --output text --query   'Reservations[*].Instances[*].[InstanceId, Tags[?Key==`Name`].Value | [0]]' >>instances.tsv
+ aws --profile nphase --region us-west-2 ec2 describe-instances --output text --query   'Reservations[*].Instances[*].[InstanceId, Tags[?Key==`Name`].Value | [0]]' >>instances.tsv
+aws --profile pfizer --region us-east-1 ec2 describe-instances --output text --query   'Reservations[*].Instances[*].[InstanceId, Tags[?Key==`Name`].Value | [0]]' >>instances.tsv
+ aws --profile pfizer --region us-east-2 ec2 describe-instances --output text --query   'Reservations[*].Instances[*].[InstanceId, Tags[?Key==`Name`].Value | [0]]' >>instances.tsv
+  aws --profile pfizer --region us-west-1 ec2 describe-instances --output text --query   'Reservations[*].Instances[*].[InstanceId, Tags[?Key==`Name`].Value | [0]]' >>instances.tsv
+ aws --profile pfizer --region us-west-2 ec2 describe-instances --output text --query   'Reservations[*].Instances[*].[InstanceId, Tags[?Key==`Name`].Value | [0]]' >>instances.tsv
